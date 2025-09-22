@@ -2,7 +2,6 @@ package com.sub.traceshot.ui.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -11,14 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sub.traceshot.R
+import com.sub.traceshot.component.MultiLazyVerticalGrid
 import com.sub.traceshot.component.TruncatedTextView
-import com.sub.traceshot.data.model.Photo
+import com.sub.traceshot.data.model.*
 import com.sub.traceshot.theme.TraceShotTheme
 
 @Composable
@@ -29,50 +31,96 @@ fun MainScreen(modifier: Modifier = Modifier) {
             text = "GALLERY",
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
+            fontWeight = FontWeight.W600,
             modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(8.dp))
-        Albums(Modifier)
-        Spacer(modifier = Modifier.height(8.dp))
-        Photos(Modifier)
+        val albums = listOf(
+            Album("governors ball music festival", "", 100),
+            Album("governors ball music festival", "", 100),
+            Album("oliver tree, tai verdes, upsahl", "", 101),
+            Album("hard summer music festival", "", 102),
+            Album("wonderbus music & arts festival 2023", "", 103),
+            Album("governors ball music festival", "", 104),
+            Album("governors ball music festival", "", 105),
+            Album("governors ball music festival", "", 100),
+            Album("governors ball music festival", "", 100),
+            Album("oliver tree, tai verdes, upsahl", "", 101),
+            Album("hard summer music festival", "", 102),
+            Album("wonderbus music & arts festival 2023", "", 103),
+            Album("governors ball music festival", "", 104),
+            Album("governors ball music festival", "", 105),
+            Album("governors ball music festival", "", 100),
+            Album("governors ball music festival", "", 100),
+            Album("oliver tree, tai verdes, upsahl", "", 101),
+            Album("hard summer music festival", "", 102),
+            Album("wonderbus music & arts festival 2023", "", 103),
+            Album("governors ball music festival", "", 104),
+            Album("governors ball music festival", "", 105),
+        )
+        val photos = listOf(
+            Photo("governors ball music festival", ""),
+            Photo("governors ball music festival", ""),
+            Photo("oliver tree, tai verdes, upsahl", ""),
+            Photo("hard summer music festival", ""),
+            Photo("wonderbus music & arts festival 2023", ""),
+            Photo("governors ball music festival", ""),
+            Photo("governors ball music festival", ""),
+            Photo("governors ball music festival", ""),
+            Photo("governors ball music festival", ""),
+            Photo("oliver tree, tai verdes, upsahl", ""),
+            Photo("hard summer music festival", ""),
+            Photo("wonderbus music & arts festival 2023", ""),
+            Photo("governors ball music festival", ""),
+            Photo("governors ball music festival", ""),
+        )
+        val multiGridItems = listOf(
+            MultiGridItem(
+                1,
+                { item -> SubTitleItem(Modifier, item.toString(), Icons.Filled.Edit) },
+                "ALBUMS"
+            ),
+            MultiGridItem(
+                2,
+                { item -> AlbumItem(Modifier, item as Album) },
+                albums
+            ),
+            MultiGridItem(
+                1,
+                { item -> SubTitleItem(Modifier, item.toString()) },
+                "PHOTOS"
+            ),
+            MultiGridItem(
+                5,
+                { item -> PhotoItem(Modifier, item as Photo) },
+                photos
+            ),
+        )
+        MultiLazyVerticalGrid(Modifier, multiGridItems)
     }
 }
 
+
 @Composable
-private fun Albums(modifier: Modifier) {
-    val photos = listOf(
-        Photo("governors ball music festival", "", 100),
-        Photo("oliver tree, tai verdes, upsahl", "", 101),
-        Photo("hard summer music festival", "", 102),
-        Photo("wonderbus music & arts festival 2023", "", 103),
-        Photo("governors ball music festival", "", 104),
-        Photo("governors ball music festival", "", 105),
-    )
+private fun SubTitleItem(modifier: Modifier, title: String, imageVector: ImageVector? = null) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 8.dp, 0.dp, 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = "ALBUMS", style = MaterialTheme.typography.titleMedium)
-        Icon(
-            imageVector = Icons.Filled.Edit,
-            modifier = Modifier.size(24.dp),
-            contentDescription = "",
-            tint = MaterialTheme.colorScheme.surface)
-    }
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(0.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(photos) { photo ->
-            AlbumItem(Modifier, photo)
+        Text(text = title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.W600)
+        imageVector?.let {
+            Icon(
+                imageVector = it,
+                modifier = Modifier.size(24.dp),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.surface)
         }
+
     }
 }
 
 @Composable
-private fun AlbumItem(modifier: Modifier, photo: Photo) {
+private fun AlbumItem(modifier: Modifier, album: Album) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -86,7 +134,7 @@ private fun AlbumItem(modifier: Modifier, photo: Photo) {
             Row {
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = photo.title,
+                    contentDescription = album.title,
 
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -96,9 +144,9 @@ private fun AlbumItem(modifier: Modifier, photo: Photo) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Column(modifier = Modifier.padding(4.dp)) {
-                    TruncatedTextView(photo.title)
+                    TruncatedTextView(album.title)
                     Text(
-                        "${photo.count}",
+                        "${album.count}",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface)
 
@@ -110,23 +158,24 @@ private fun AlbumItem(modifier: Modifier, photo: Photo) {
 }
 
 @Composable
-private fun Photos(modifier: Modifier){
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+private fun PhotoItem(modifier: Modifier, photo: Photo) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .aspectRatio(1f),
+        shape = RoundedCornerShape(12.dp),
     ) {
-        Text(text = "ALBUMS", style = MaterialTheme.typography.titleMedium)
-        Icon(
-            imageVector = Icons.Filled.Edit,
-            modifier = Modifier.size(24.dp),
-            contentDescription = "",
-            tint = MaterialTheme.colorScheme.surface)
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_background),
+            contentDescription = photo.title,
+
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxHeight()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(12.dp))
+        )
     }
-}
-
-@Composable
-private fun AlbumItem(modifier: Modifier){
-
 }
 
 

@@ -44,7 +44,6 @@ fun AppTabNavigation(
             NavigationBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
                     .padding(0.dp),
                 containerColor = Color.Transparent,
             ) {
@@ -57,7 +56,7 @@ fun AppTabNavigation(
                             destination.icon?.let {
                                 Icon(
                                     imageVector = it,
-                                    modifier = Modifier.size(32.dp),
+                                    modifier = Modifier.size(24.dp),
                                     contentDescription = null,
                                     tint =  MaterialTheme.colorScheme.onSurface
                                 )
@@ -122,8 +121,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 
 @Preview(
     showBackground = true,
-    backgroundColor = 0xFF0f0c12,
-    heightDp = 64)
+    backgroundColor = 0xFF0f0c12, )
 @Composable
 fun AppTabNavigationPreview() {
     TraceShotTheme {

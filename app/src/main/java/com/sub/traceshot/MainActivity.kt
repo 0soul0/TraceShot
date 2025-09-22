@@ -5,8 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,7 +33,6 @@ fun App(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp, 8.dp, 16.dp, 0.dp)
             .background(MaterialTheme.colorScheme.background),
         bottomBar = {
             AppTabNavigation(
@@ -46,7 +44,7 @@ fun App(modifier: Modifier = Modifier) {
         AppNavHost(
             allDestinations = viewScreens,
             navController = navController,
-            modifier = modifier.padding(innerPadding))
+            modifier = modifier.padding(innerPadding).padding(16.dp, 8.dp, 16.dp, 0.dp))
     }
 
 }
