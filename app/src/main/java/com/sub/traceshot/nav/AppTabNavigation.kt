@@ -7,7 +7,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight.Companion.W900
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,10 +38,13 @@ fun AppTabNavigation(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Transparent),
+                .background(Color.Transparent)
+                .graphicsLayer {
+                    shadowElevation = 16.dp.toPx()
+                    shape= RoundedCornerShape(24.dp, 24.dp, 0.dp,0.dp)
+                    translationY = 4.dp.toPx()
+                },
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(8.dp,8.dp,0.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation =8.dp)
         ) {
             NavigationBar(
                 modifier = Modifier
@@ -56,9 +61,8 @@ fun AppTabNavigation(
                             destination.icon?.let {
                                 Icon(
                                     imageVector = it,
-                                    modifier = Modifier.size(24.dp),
+                                    modifier = Modifier.size(28.dp),
                                     contentDescription = null,
-                                    tint =  MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         },
@@ -66,17 +70,16 @@ fun AppTabNavigation(
                             Text(
                                 destination.title,
                                 style = MaterialTheme.typography.titleSmall,
-                                fontWeight = W900,
-                                color = MaterialTheme.colorScheme.onSurface)
+                                fontWeight = W900)
                         },
                         selected = selectedDestination == destination,
                         onClick = {
                             navController.navigateSingleTopTo(destination.route)
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.secondary,
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
                             unselectedIconColor = MaterialTheme.colorScheme.inversePrimary,
-                            selectedTextColor = MaterialTheme.colorScheme.secondary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
                             unselectedTextColor = MaterialTheme.colorScheme.inversePrimary,
                             indicatorColor = Color.Transparent
                         )
@@ -92,7 +95,7 @@ fun AppTabNavigation(
 @Composable
 fun AppNavHost(
     allDestinations: List<AppDestination>,
-    startDestination: String=allDestinations.first().route,
+    startDestination: String = allDestinations.first().route,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -121,7 +124,8 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 
 @Preview(
     showBackground = true,
-    backgroundColor = 0xFF0f0c12, )
+    backgroundColor = 0xFF0f0c12,
+)
 @Composable
 fun AppTabNavigationPreview() {
     TraceShotTheme {
